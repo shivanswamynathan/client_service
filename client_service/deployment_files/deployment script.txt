@@ -1,0 +1,28 @@
+Deployment Steps
+
+First, create a virtual environment using the command:
+
+CMD -- python -m venv venv
+
+
+To activate the virtual environment, run:
+
+CMD -- venv\Scripts\activate
+
+Navigate to the ginthi_agents folder:
+
+CMD -- cd ginthi_agents
+
+run the migrations check
+
+CMD -- alembic upgrade head
+
+Run the following command to start the client server:
+
+CMD -- python -m client_service.main
+
+
+To view the API documentation, open your browser and enter the link displayed in the terminal.
+Example:
+
+http://127.0.0.1:8005/docs

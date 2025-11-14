@@ -1,0 +1,116 @@
+===========================================
+Alembic — Creating and Managing Migrations
+===========================================
+
+Step 1: Create a virtual environment
+------------------------------------
+CMD -- python -m venv venv
+
+
+Step 2: Activate the virtual environment
+----------------------------------------
+For Windows:
+CMD -- venv\Scripts\activate
+
+For macOS/Linux:
+CMD -- source venv/bin/activate
+
+
+Step 3: Navigate to your FastAPI project directory
+--------------------------------------------------
+CMD -- cd client_service
+
+
+Step 4: Verify that Alembic is configured correctly
+---------------------------------------------------
+Ensure the following files and folders exist:
+ - alembic.ini
+ - alembic/
+ - alembic/versions/
+ - Base model defined in your SQLAlchemy setup
+
+If not initialized yet, run:
+CMD -- alembic init alembic
+
+
+Step 5: Make changes to your SQLAlchemy models
+----------------------------------------------
+Update your models (e.g., add new table, modify columns, etc.)
+Example:
+- Adding a new column to an existing table
+- Creating a new model class for a new table
+
+
+Step 6: Generate a new Alembic migration
+----------------------------------------
+After modifying models, generate a migration script:
+
+CMD -- alembic revision --autogenerate -m "added new table for orders"
+
+This command compares your SQLAlchemy models (Base.metadata)
+with the current database schema and creates a new migration file
+under the folder:
+
+alembic/versions/
+
+
+Step 7: Review the generated migration file
+-------------------------------------------
+Navigate to the newly created migration script under:
+ - alembic/versions/
+
+Open the file and verify that all the CREATE TABLE / ALTER TABLE
+statements match your expected schema changes.
+
+Always review the script before applying to production.
+
+
+Step 8: Apply the migration to the database
+-------------------------------------------
+Once verified, run:
+
+CMD -- alembic upgrade head
+
+This applies all new migrations up to the latest version.
+
+
+Step 9: Validate the migration was applied
+------------------------------------------
+Check migration history:
+CMD -- alembic history
+
+View the current DB revision:
+CMD -- alembic current
+
+You can also connect to your database (e.g., using psql or Azure Data Studio)
+to confirm that the schema updates are reflected properly.
+
+
+Step 10: Downgrade if necessary
+-------------------------------
+If an issue occurs, you can roll back the last migration:
+
+CMD -- alembic downgrade -1
+
+To downgrade to a specific version ID:
+CMD -- alembic downgrade <revision_id>
+
+
+Step 11: Clean up and commit
+----------------------------
+Once migrations are applied successfully:
+- Commit the migration file in `alembic/versions/` to Git.
+- Do not delete or modify old migration files.
+- Ensure your team applies the same migration chain on all environments.
+
+
+===========================================
+Additional Notes
+===========================================
+- Always test migrations on a staging or QA environment before applying to production.
+- Ensure all environment variables (DB_USER, DB_PASSWORD, DB_HOST, DB_PORT, DB_NAME)
+  are correctly configured in the `.env` file.
+- For automated CI/CD, you can include:
+  CMD -- alembic upgrade head
+  in your deployment script before starting the FastAPI server.
+- Never modify previously committed migration files — always create a new one for changes.
